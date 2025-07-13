@@ -1,0 +1,73 @@
+{% extends "BASE.html" %}
+{% block title %} ShopyWhopy Home {% endblock title %}
+{% block content %}
+<section class="hero" id="home">
+    <div class="container">
+        <h1>Welcome to ShopyWhopy</h1>
+        <p>Discover premium products with crystal-clear quality and refreshing experiences</p>
+        <a href="#products" class="cta-button">Shop Now</a>
+    </div>
+</section>
+
+<section class="features">
+    <div class="container">
+        <h2 class="section-title">Why Choose ShopyWhopy?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🚚</div>
+                <h3>Free Shipping</h3>
+                <p>Free delivery on all orders over $50. Fast and reliable shipping worldwide.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💎</div>
+                <h3>Premium Quality</h3>
+                <p>Carefully curated products that meet our high standards of excellence.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3>Secure Shopping</h3>
+                <p>Your data is protected with industry-leading security measures.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="products" id="products">
+    <div class="container">
+        <h2 class="section-title">Featured Products</h2>
+        {% if featured_products %}
+            <div class="products-grid">
+                {% for f in featured_products %}
+                    <div class="product-card">
+                        <div class="product-info">
+                        <img src="{{ f.image_url }}" height=715>
+                        <h3 class="product-name">{{ f.name }}</h3>
+                        <p class="product-price">{{ f.price }}</p>
+                        <button class="add-to-cart" onclick="addToCart">Add to Cart</button>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div> 
+        {% endif %}
+    </div>
+
+    <div class="container">
+        <h2 class="section-title">🛒 All Products</h2>
+        {% if allProducts %}
+            <div class="products-grid">
+                {% for p in allProducts %}
+                    <div class="product-card">
+                        <div class="product-info">
+                        <img src="{{ p.image_url }}" height=330px >
+                        <h3 class="product-name">{{ p.name }}</h3>
+                        <p class="product-price">${{ p.price }}</p>
+                        <button class="add-to-cart" onclick="addToCart">Add to Cart</button>
+                        </div>
+                    </div> 
+                {% endfor %}   
+            </div>
+        {% endif %}
+    </div>        
+</section>
+
+{%  endblock  %}

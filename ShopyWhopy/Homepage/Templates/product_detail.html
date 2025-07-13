@@ -1,0 +1,240 @@
+{% extends "BASE.html" %}
+{% block title %} ShopyWhopy Products {% endblock title %}
+
+{% block content %}
+<style>
+    /* Product Detail Specific Styles */
+    .product-detail-section {
+        padding: 4rem 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 3rem;
+        align-items: flex-start;
+    }
+
+    .product-detail-image-container {
+        flex: 1;
+        min-width: 300px;
+        max-width: 500px;
+        background: linear-gradient(45deg, var(--primary-aqua), var(--dark-aqua));
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 25px var(--shadow-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+    }
+
+    body.dark-mode .product-detail-image-container {
+        box-shadow: 0 5px 25px var(--shadow-dark);
+    }
+
+    .product-detail-image {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+    }
+
+    .product-detail-info {
+        flex: 2;
+        min-width: 300px;
+        background: var(--card-light);
+        padding: 2.5rem;
+        border-radius: 15px;
+        box-shadow: 0 5px 25px var(--shadow-light);
+    }
+
+    body.dark-mode .product-detail-info {
+        background: var(--card-dark);
+        box-shadow: 0 5px 25px var(--shadow-dark);
+    }
+
+    .product-detail-info h1 {
+        font-size: 2.8rem;
+        margin-bottom: 1rem;
+        color: var(--primary-aqua);
+    }
+
+    .product-detail-info .category {
+        font-size: 1.1rem;
+        color: var(--light-aqua);
+        margin-bottom: 1rem;
+    }
+
+    .product-detail-info .description {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        margin-bottom: 1.5rem;
+        color: var(--text-light);
+    }
+
+    body.dark-mode .product-detail-info .description {
+        color: var(--text-dark);
+    }
+
+    .product-detail-price {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: var(--primary-aqua);
+        margin-bottom: 1.5rem;
+    }
+
+    .quantity-selector {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .quantity-selector label {
+        margin-right: 1rem;
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: var(--text-light);
+    }
+
+    body.dark-mode .quantity-selector label {
+        color: var(--text-dark);
+    }
+
+    .quantity-selector input[type="number"] {
+        width: 70px;
+        padding: 0.6rem;
+        border: 1px solid var(--primary-aqua);
+        border-radius: 8px;
+        font-size: 1rem;
+        text-align: center;
+        background: var(--bg-light);
+        color: var(--text-light);
+    }
+
+    body.dark-mode .quantity-selector input[type="number"] {
+        background: var(--bg-dark);
+        color: var(--text-dark);
+    }
+
+    .add-to-cart-large {
+        background: var(--primary-aqua);
+        color: white;
+        border: none;
+        padding: 1rem 2.5rem;
+        border-radius: 50px;
+        font-size: 1.2rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+        text-align: center;
+    }
+
+    .add-to-cart-large:hover {
+        background: var(--light-aqua);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .product-specifications {
+        margin-top: 2.5rem;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        padding-top: 2rem;
+    }
+
+    body.dark-mode .product-specifications {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .product-specifications h3 {
+        font-size: 1.8rem;
+        color: var(--primary-aqua);
+        margin-bottom: 1rem;
+    }
+
+    .product-specifications ul {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .product-specifications ul li {
+        margin-bottom: 0.8rem;
+        font-size: 1rem;
+        color: var(--text-light);
+    }
+
+    body.dark-mode .product-specifications ul li {
+        color: var(--text-dark);
+    }
+
+    .product-specifications ul li strong {
+        color: var(--dark-aqua);
+    }
+
+    /* Responsive adjustments for product detail */
+    @media (max-width: 768px) {
+        .product-detail-section {
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .product-detail-image-container {
+            max-width: 100%;
+            padding: 1rem;
+        }
+
+        .product-detail-info {
+            padding: 1.5rem;
+        }
+
+        .product-detail-info h1 {
+            font-size: 2rem;
+        }
+
+        .product-detail-price {
+            font-size: 2rem;
+        }
+    }
+</style>
+
+<section class="product-detail-section">
+    <div class="product-detail-image-container">
+        <img src="{{ p.image_url }}" alt="{{ p.name }}" class="product-detail-image">
+    </div>
+    <div class="product-detail-info">
+        <h1>{{ p.name }}</h1>
+        <p class="category">Category: {{ p.category }}</p>
+        <p class="description">
+            {{ p.desc }}
+        </p>
+        <p class="product-detail-price">${{ "%.2f" | format(p.price) }}</p>
+
+        <div class="quantity-selector">
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" value="1" min="1" max="{{ p.quantity }}"> {# Assuming 'stock' is available #}
+        </div>
+
+        <button class="add-to-cart-large" onclick="addToCart('{{ p.id }}', '{{ p.name }}', '{{ p.price }}')">Add to Cart</button>
+
+        <!--{% if product.specifications %}
+        <div class="product-specifications">
+            <h3>Specifications</h3>
+            <ul>
+                {% for key, value in product.specifications.items() %}
+                <li><strong>{{ key | title }}:</strong> {{ value }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %} -->
+    </div>
+</section>
+
+<script>
+    function addToCart(productId, productName, productPrice) {
+        const quantity = document.getElementById('quantity').value;
+        // In a real application, you'd send an AJAX request to your backend
+        // to add the item to the user's cart.
+        console.log(`Adding ${quantity} of ${productName} (ID: ${productId}, Price: $${productPrice}) to cart.`);
+        alert(`${quantity} of ${productName} added to cart!`);
+        // Example: You might want to redirect to the cart page or update a cart icon
+        // window.location.href = '/cart';
+    }
+</script>
+{% endblock %}
